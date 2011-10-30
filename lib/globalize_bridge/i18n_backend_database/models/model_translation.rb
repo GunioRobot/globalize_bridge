@@ -1,4 +1,4 @@
-# This is a helper class to better deal with model translation tools 
+# This is a helper class to better deal with model translation tools
 # when used in combination with Globalize2 translated internal
 class ModelTranslation < ::Translation
   attr_accessor :table_name

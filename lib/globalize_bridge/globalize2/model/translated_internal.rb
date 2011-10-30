@@ -1,13 +1,13 @@
-# extends Globalize2 with Globalize1 DB internal (keep_translations_in_model) translations 
+# extends Globalize2 with Globalize1 DB internal (keep_translations_in_model) translations
 module Globalize
   module Model
-  
-    # set in environment.rb 
+
+    # set in environment.rb
     # Globalize::Model.keep_translations_in_model = true|false
     @@keep_translations_in_model = false
     mattr_reader :keep_translations_in_model
     mattr_writer :keep_translations_in_model
-  
+
     module ActiveRecord
 
       module TranslatedInternal
@@ -26,12 +26,12 @@ module Globalize
 
           attr_accessor :keep_translations_in_model
 
-          # Intersected translates macro triggers Globalize2 translate if 
+          # Intersected translates macro triggers Globalize2 translate if
           # translations are not inside the model, otherwise, uses model
           # internal translations
           def translates_with_bridge(*attr_names)
             return if included_modules.include? InstanceMethods
-            
+
             options = attr_names.extract_options!
             options.reverse_merge!({:base_as_default => false})
 
@@ -40,12 +40,12 @@ module Globalize
             else
               self.keep_translations_in_model
             end
-            
+
             keep_internal ? translates_internal(attr_names, options) : translates_withouth_bridge(attr_names, options)
           end
 
           protected
-      
+
           # Alternative storage mechanism storing the translations in the models'
           # own tables.
           #
@@ -53,7 +53,7 @@ module Globalize
           #
           #   Globalize::Model.keep_translations_in_model = true
           #
-          # or 
+          # or
           #
           #   class Post < ActiveRecord::Base
           #     ...
@@ -96,7 +96,7 @@ module Globalize
                 end
                 alias_method :localized_facet, :translated_attribute_name
                 deprecate :localized_facet => "Globalize1: You should use translated_attribute_name"
-            
+
               end
 
               # Returns all attribute names that are not translated
@@ -105,7 +105,7 @@ module Globalize
               end
               alias_method :non_localized_fields, :none_translated_attribute_names
               deprecate :non_localized_fields => "Globalize1: You should use none_translated_attribute_names"
-          
+
               # Is field translated?
               # Returns true if translated
               def translated?(facet, locale_code = nil)
@@ -210,7 +210,7 @@ module Globalize
                   return value
                 end
                 protected :add_bidi
-                
+
               STR
             end
 
@@ -224,13 +224,13 @@ module Globalize
 
           private
 
-          # This method is deprecated on the latest stable version of Rails. 
+          # This method is deprecated on the latest stable version of Rails.
           # The last existing version (v2.1.0) is shown here.
           def determine_finder(match)
             match.captures.first == 'all_by' ? :find_every : :find_initial
           end
-          
-          # This method is deprecated on the latest stable version of Rails. 
+
+          # This method is deprecated on the latest stable version of Rails.
           # The last existing version (v2.1.0) is shown here.
           def extract_attribute_names_from_match(match)
             match.captures.last.split('_and_')

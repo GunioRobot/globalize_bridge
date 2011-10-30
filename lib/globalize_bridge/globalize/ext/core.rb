@@ -8,7 +8,7 @@ module GlobalizeBridge # :nodoc:
           alias_method :%, :format_with_extension
         }
       end
-      
+
       # Indicates direction of text (usually +ltr+ [left-to-right] or
       # +rtl+ [right-to-left].
       attr_accessor :direction
@@ -88,12 +88,12 @@ module GlobalizeBridge # :nodoc:
       # % string format
       #
       # E.g.
-      # 
+      #
       #   "fox jumps on %{animal}" % {:animal => "chicken"} --> "fox jumps on chicken"
       #
-      # Format - Uses str as a format specification, and returns the result of applying it to arg. 
-      # If the format specification contains more than one substitution, then arg must be 
-      # an Array containing the values to be substituted. See Kernel::sprintf for details of the 
+      # Format - Uses str as a format specification, and returns the result of applying it to arg.
+      # If the format specification contains more than one substitution, then arg must be
+      # an Array containing the values to be substituted. See Kernel::sprintf for details of the
       # format string. This is the default behavior of the String class.
       #
       # * arg: an Array or other class except Hash.
@@ -114,8 +114,8 @@ module GlobalizeBridge # :nodoc:
       #   "%{firstname}, %{familyname}" % {:firstname => "Masao", :familyname => "Mutoh"} --> "Masao Mutoh"
       #   "{firstname}, {familyname}" % {:firstname => "Masao", :familyname => "Mutoh"} --> "Masao Muto"
       #   "{{firstname}}, {{familyname}}" % {:firstname => "Masao", :familyname => "Mutoh"} --> "Masao Muto"
-      # 
-      # Note: This code was derived from gettext string.rb package and adopted for GlobalizeBridge. 
+      #
+      # Note: This code was derived from gettext string.rb package and adopted for GlobalizeBridge.
       #       We allow {arg}, {{arg}}, %{} and ${arg} interpolation.
       #
       def format_with_extension(args)
@@ -187,7 +187,7 @@ module GlobalizeBridge # :nodoc:
         str = self.to_s(base)
         if (base==10)
           if defined?(I18n) && I18n.locale
-            delimiter = I18n.t("number.format.delimiter", :raise => true) rescue ',' 
+            delimiter = I18n.t("number.format.delimiter", :raise => true) rescue ','
             number_grouping_scheme = I18n.t("number.format.grouping_scheme", :raise => true) rescue :western
           end
           delimiter ||= ','
@@ -204,7 +204,7 @@ module GlobalizeBridge # :nodoc:
     end
 
     module Float
-    
+
       # Returns the integer in String form, according to the rules of the
       # currently active locale.
       #
@@ -232,29 +232,29 @@ module GlobalizeBridge # :nodoc:
         end
       end
       alias :loc :localize
-    
+
     end
 
     module Time
-    
+
       # Acts the same as #strftime, but returns a localized version of the
       # formatted date/time string.
       def localize(format=:default)
         I18n.l(self, :format => format || :default)
       end
       alias :loc :localize
-    
+
     end
 
     module Date
-    
+
       # Acts the same as #strftime, but returns a localized version of the
       # formatted date/time string.
       def localize(format=:default)
         I18n.l(self, :format => format || :default)
       end
       alias :loc :localize
-    
+
     end
 
   end

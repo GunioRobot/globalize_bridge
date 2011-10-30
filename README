@@ -2,7 +2,7 @@ GlobalizeBridge
 ===============
 
 This plugin helps to ease the migration of existing Globalize 1 applications to the built in
-I18n framework without major code changes. Existing localization helpers and extensions are 
+I18n framework without major code changes. Existing localization helpers and extensions are
 utilized to make the migration as smooth ride.
 
 The plugin builds on top of the Globalize 2 and I18n Backend Database plugins, which need to be installed.
@@ -16,7 +16,7 @@ Additionally, the following features were added:
 
 2. Fallback locales for static and database backends
 
-    # e.g. 
+    # e.g.
     I18n.fallbacks[:"de-DE"] = [:"de-DE", :de, :en, :root]
     I18n.locale = :"de-DE"
     I18n.t :hello -> lookup in de-DE.yml, de.yml, en.yml then in database
@@ -41,7 +41,7 @@ Additionally, the following features were added:
       self.keep_translations_in_model = true
       translates :title, :base_as_default => true
     end
- 
+
 6. Human readable raw key support with scopes yml files and database
 
     # en.yml
@@ -49,10 +49,10 @@ Additionally, the following features were added:
       foo."bar": "check out the bar"
 
     I18n.t "bar", :scope => "foo"   -> "check out the bar"
- 
+
 7. Fast locale switching:
 
-    # e.g. 
+    # e.g.
     I18n.locale = :en
     I18n.switch_locale :"de-DE" do
       # here we are German
@@ -70,11 +70,11 @@ You can generally follow these migration steps, the detailed steps depend on you
 2. Populate the locales table with default locales
 
     rake i18n:populate:default_locales
-    
+
 3. Export globalize translations
 
     rake globalize:export
-    
+
 4. Import into Backend Datbase
 
     rake globalize:import

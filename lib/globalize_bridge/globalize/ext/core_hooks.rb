@@ -1,19 +1,19 @@
-# Hook up core extenstions (need to define them as main level, hence 
+# Hook up core extenstions (need to define them as main level, hence
 # the :: prefix)
-class ::String # :nodoc: 
+class ::String # :nodoc:
   include GlobalizeBridge::CoreExtensions::String
 end
 
-class ::Symbol # :nodoc:  
+class ::Symbol # :nodoc:
   include GlobalizeBridge::CoreExtensions::Symbol
 end
 
-class ::Object # :nodoc:  
+class ::Object # :nodoc:
   include GlobalizeBridge::CoreExtensions::Object
 end
 
 class ::Fixnum # :nodoc:
-  include GlobalizeBridge::CoreExtensions::Integer 
+  include GlobalizeBridge::CoreExtensions::Integer
 end
 
 class ::Bignum # :nodoc:
@@ -21,7 +21,7 @@ class ::Bignum # :nodoc:
 end
 
 class ::Float # :nodoc:
-  include GlobalizeBridge::CoreExtensions::Float  
+  include GlobalizeBridge::CoreExtensions::Float
 end
 
 class ::Time # :nodoc:

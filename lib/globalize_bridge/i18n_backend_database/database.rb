@@ -22,7 +22,7 @@ module I18n
       def locale=(code)
         @locale = ::Locale.find_by_code(code)
       end
-      
+
       # Handles the lookup and addition of translations to the database
       #
       # On an initial translation, the locale is checked to determine if
@@ -50,7 +50,7 @@ module I18n
             @locale = locale_in_context(fallback_locale) and break if entry = lookup(locale_in_context(fallback_locale), key)
           end
         end
-        
+
         cache_lookup = true unless entry.nil?
 
         # if no entry exists for the current locale and the current locale is not the default locale then lookup translations for the default locale for this key
@@ -72,7 +72,7 @@ module I18n
         end
 
         # The requested key might not be a parent node in a hierarchy of keys instead of a regular 'leaf' node
-        #   that would simply result in a string return.  If so, check the database for possible children 
+        #   that would simply result in a string return.  If so, check the database for possible children
         #   and return them in a nested hash if we find them.
         #   We can safely ignore pluralization indeces here since they should never apply to a hash return
         if !entry && (key.is_a?(String) || key.is_a?(Symbol))
@@ -88,7 +88,7 @@ module I18n
 
         # we check the database before creating a translation as we can have translations with nil values
         # if we still have no blasted translation just go and create one for the current locale!
-        unless entry 
+        unless entry
           pluralization_index = (options[:count].nil? || options[:count] == 1) ? 1 : 0
           translation =  @locale.translations.find_by_key_and_pluralization_index(Translation.hk(key), pluralization_index) ||
             @locale.create_translation(key, I18n.unescape_translation_key_without_scope(key), pluralization_index)
@@ -107,13 +107,13 @@ module I18n
       def available_locales
         ::Locale.available_locales
       end
-      
+
       protected
 
       # override from I18n::Backend::Database to cache DB locales
       def locale_in_context(locale)
         unless db_locale = @@cached_db_locales.find {|record| record.code == locale.to_s}
-          # TODO: Locale should be scoped to I18n::Backend::Database::Locale to avoid 
+          # TODO: Locale should be scoped to I18n::Backend::Database::Locale to avoid
           #       naming conflict with I18n::Locale module
           db_locale = ::Locale.find_by_code(locale.to_s)
           raise InvalidLocale.new(locale) unless db_locale
@@ -122,7 +122,7 @@ module I18n
         db_locale
       end
 
-      # looks up translations for the default locale, and if they exist untranslated records are created for the locale and the default locale values are returned 
+      # looks up translations for the default locale, and if they exist untranslated records are created for the locale and the default locale values are returned
       def use_and_copy_default_locale_translations_if_they_exist(locale, key)
         default_locale_entry = lookup(::Locale.default_locale, key)
         return unless default_locale_entry
@@ -132,7 +132,7 @@ module I18n
             locale.create_translation(key, nil, index) if entry
           end
         else
-          locale.create_translation(key, nil) 
+          locale.create_translation(key, nil)
         end
 
         return default_locale_entry
@@ -140,7 +140,7 @@ module I18n
 
       # override database backend
       #
-      #  * add unescaping of namespace key syntax 
+      #  * add unescaping of namespace key syntax
       #  * fix fetch nil values from cache
       #
       # e.g.
@@ -160,7 +160,7 @@ module I18n
           when 1
             value = translations.first.value_or_default
           else
-            value = translations.inject([]) do |values, t| 
+            value = translations.inject([]) do |values, t|
               values[t.pluralization_index] = t.value_or_default
               values
             end
@@ -169,7 +169,7 @@ module I18n
           return I18n.unescape_translation_key_without_scope(value)
         end
       end
-      
+
     end
   end
 end

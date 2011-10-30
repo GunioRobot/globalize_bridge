@@ -15,7 +15,7 @@ module Globalize1
     def code; iso_639_1 || iso_639_3 || rfc_3066; end
   end
   class Translation < ::ActiveRecord::Base  # :nodoc:
-    set_table_name "globalize_translations"    
+    set_table_name "globalize_translations"
     belongs_to :language, :class_name => "::Globalize1::Language"
     self.store_full_sti_class = false if defined?(ActiveRecord::Base.store_full_sti_class)
   end
@@ -26,7 +26,7 @@ end unless defined?(Globalize1::Language) || defined?(Globalize1::Translation)
 namespace :globalize do
 
   #--- exporting
-  
+
   desc "Export globalize view translations to CSV file"
   task :export do
     Rake::Task['globalize:export:languages'].invoke
@@ -36,7 +36,7 @@ namespace :globalize do
   namespace :export do
 
     desc "Export globalize languages to CSV"
-    task :languages => :environment do 
+    task :languages => :environment do
       file_name = "db/globalize_languages.csv"
       puts "exporting globalize languages to #{file_name}..."
 
@@ -62,10 +62,10 @@ namespace :globalize do
     end
 
     desc "Export globalize translations to CSV"
-    task :translations => :environment do 
+    task :translations => :environment do
       file_name = "db/globalize_translations.csv"
       puts "exporting globalize translations to #{file_name}..."
-      
+
       translations = Globalize1::ViewTranslation.find(:all, :conditions => ["built_in = ?", false],
         :order => 'language_id')
       file = File.open("#{RAILS_ROOT}/#{file_name}", 'wb')
@@ -98,26 +98,26 @@ namespace :globalize do
   end
 
   #--- importing
-    
+
   desc "Import globalize CSV data to I18n::Backend::Database"
   task :import => :environment do
     Rake::Task['globalize:import:languages'].invoke
     Rake::Task['globalize:import:translations'].invoke
   end
-  
-  namespace :import do 
+
+  namespace :import do
     desc "Import globalize languages to local"
     task :languages => :environment do
       file_name = "db/globalize_languages.csv"
       puts "importing from #{file_name}..."
-      
+
       reader = CSV::Reader.parse(File.open("#{RAILS_ROOT}/#{file_name}", 'rb'), ',')
       columns = reader.shift.map {|column_name| column_name}
 
       reader.each_with_index do |row, index|
         next if row.first.nil? # skip blank lines
         row = inject(columns, row)
-        
+
         unless @locale = ::Locale.find_by_code(row[:language_code])
           @locale = ::Locale.create!({:code => row[:language_code], :name => row[:native_name] || row[:english_name]})
           puts "* code '#{row[:language_code]}' language '#{row[:english_name]}' added"
@@ -127,12 +127,12 @@ namespace :globalize do
       end
       puts "done."
     end
-    
+
     desc "Import globalize translations to local"
     task :translations => :environment do
       file_name = "db/globalize_translations.csv"
       puts "importing from #{file_name}..."
-      
+
       reader = CSV::Reader.parse(File.open("#{RAILS_ROOT}/#{file_name}", 'rb'), ',')
       columns = reader.shift.map {|column_name| column_name}
 
@@ -144,7 +144,7 @@ namespace :globalize do
         if @locale = ::Locale.find_by_code(row[:language_code])
           raw_key = row[:tr_key]
 
-=begin          
+=begin
           # convert %{foo} to {{foo}}
           while raw_key.match(/%\{([a-z,0-9,_]*)\}/i) {}
             raw_key.gsub!(/%\{([a-z,0-9,_]*)\}/i, "{{#{$1}}}")
@@ -156,11 +156,11 @@ namespace :globalize do
             raw_key.gsub!(/%d/, '{{count}}')
           end
 
-          # setup values 
+          # setup values
           pluralization_index = row[:pluralization_index] ? row[:pluralization_index].to_i : 1
           value = row[:text].blank? ? nil : row[:text]
           namespace = row[:namespace].blank? ? nil : row[:namespace]
-          
+
           # escape to key
           key = if namespace
             I18n.escape_translation_key(raw_key, namespace)
@@ -169,10 +169,10 @@ namespace :globalize do
           else
             raw_key
           end
-          
+
           if !raw_key.blank? && !value.blank?
             unless @locale.translations.find_by_raw_key_and_pluralization_index(key, pluralization_index)
-              @locale.translations.create!({:key => key, :raw_key => key.to_s, 
+              @locale.translations.create!({:key => key, :raw_key => key.to_s,
                 :value => value, :pluralization_index => pluralization_index})
               puts "* added code -> #{@locale.code} raw_key -> #{raw_key} -> key: #{key} -> value #{value} -> pluralization: #{pluralization_index}"
             else
@@ -186,5 +186,5 @@ namespace :globalize do
       puts "done."
     end
   end
-  
+
 end

@@ -5,11 +5,11 @@ module ActionView #:nodoc:
     # If I18n.fallback is defined, will go down the fallback sequence
     #
     # E.g.
-    #   
+    #
     #   de/index.html yields over index.de.html yields over index.html
     #
     def find_template(original_template_path, format = nil, html_fallback = true)
-      
+
       return original_template_path if original_template_path.respond_to?(:render)
       template_path = original_template_path.sub(/^\//, '')
 

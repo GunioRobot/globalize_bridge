@@ -66,13 +66,13 @@ module I18n
     # e.g.
     #
     #   :'Foo. And Bar.', :foo -> ' foo."Foo. And Bar."
-    #   
+    #
     #
     def escape_translation_key(key, scope=nil, separator=nil)
       scope ? "#{scope}#{separator || I18n.default_separator}\"#{key}\"" : "\"#{key}\""
     end
 
-    # inverse of escape, returns and array of scope and value or if not escaped, 
+    # inverse of escape, returns and array of scope and value or if not escaped,
     #
     # e.g.
     #
@@ -82,8 +82,8 @@ module I18n
     #
     def unescape_translation_key(key, separator=nil)
       # 'foo."Foo. And Bar."'.match /((.*)\."(.*)"$)|(^"(.*)"$)/
-      if key && key.is_a?(String) && key.match(unescape_translation_key_regexp(separator)) 
-        if $1 
+      if key && key.is_a?(String) && key.match(unescape_translation_key_regexp(separator))
+        if $1
           return $2, $3
         else
           return nil, $5
@@ -92,7 +92,7 @@ module I18n
         return nil, key
       end
     end
-    
+
     # returns true if the key is escaped
     #
     # e.g.
@@ -123,20 +123,20 @@ module I18n
       keys = (keys.flatten - ['']).reject {|k| !k}
       keys.map {|k| k.to_sym if k}
     end
-    
+
     private
 
     # regular expression to match escaped keys
     def unescape_translation_key_regexp(separator=nil)
       Regexp.new("((.*)#{'\\' + (separator || I18n.default_separator)}\"(.*)\"$)|(^\"(.*)\"$)")
     end
-    
-    # Overload 
+
+    # Overload
     # Note: Will be deprecated, overload I18n.normalize_keys instead in the future.
     def normalize_translation_keys(locale, key, scope, separator = nil)
       normalize_keys(locale, key, scope, separator)
     end
-    
+
   end
-  
+
 end
